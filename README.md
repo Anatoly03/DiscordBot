@@ -9,3 +9,9 @@
 
 DISCORD_TOKEN = "TOKEN"
 ```
+
+## Start
+
+```
+npm run start
+```
