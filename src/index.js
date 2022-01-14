@@ -1,5 +1,6 @@
 import { config } from 'dotenv'
 import { Client, Intents } from 'discord.js'
+import * as main from './main.js'
 
 config()
 
@@ -16,8 +17,5 @@ const client = new Client({
     ],
 })
 
-client.on("ready", async () => {
-    console.log("Connected!");
-});
-
-client.login(process.env.DISCORD_TOKEN);
+client.on("ready", main.on_init)
+client.login(process.env.DISCORD_TOKEN)
