@@ -1,4 +1,3 @@
-
 export async function on_init() {
-    console.log("Connected!")
+    console.log('Connected!')
 }
