@@ -18,4 +18,10 @@ const client = new Client({
 })
 
 client.on('ready', main.on_init)
+
+client.on('interactionCreate', async (interaction) => {
+    if (!interaction.isCommand()) return
+    main.on_command(interaction)
+})
+
 client.login(process.env.DISCORD_TOKEN)
