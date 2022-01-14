@@ -17,5 +17,9 @@
   "bugs": {
     "url": "https://github.com/Anatoly03/DiscordBot/issues"
   },
-  "homepage": "https://github.com/Anatoly03/DiscordBot#readme"
+  "homepage": "https://github.com/Anatoly03/DiscordBot#readme",
+  "dependencies": {
+    "discord.js": "^13.6.0",
+    "dotenv": "^11.0.0"
+  }
 }
