@@ -1,8 +1,13 @@
 import { config } from 'dotenv'
+import fs from 'fs'
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
 import { Client, Intents } from 'discord.js'
 import * as main from './main.js'
 import { redis } from './io.js'
 import init_commands from './commands.js'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 // Discord's Gateway Model:
 // https://discord.com/developers/docs/topics/gateway#list-of-intents
@@ -15,16 +20,25 @@ const client = new Client({
         Intents.FLAGS.GUILD_PRESENCES,
         Intents.FLAGS.GUILD_MEMBERS,
     ],
-});
+})
 
 // Before code execution
-(async () => {
+;(async () => {
     config()
     await redis.connect()
     await init_commands(client)
 })()
 
-client.on('ready', main.on_init)
-client.on('interactionCreate', main.on_command)
+// Events
+;(async () => {
+    const eventFiles = fs
+        .readdirSync(__dirname + '/events')
+        .filter((file) => file.endsWith('.js'))
+
+    for (const file of eventFiles) {
+        const event = await import(__dirname + `/events/${file}`)
+        client.on(event.name, (...args) => event.run(...args))
+    }
+})()
 
 client.login(process.env.DISCORD_TOKEN)

@@ -12,11 +12,11 @@ export default async function (client) {
     client.commands = new Collection()
 
     const commands = fs
-        .readdirSync(__dirname)
+        .readdirSync(__dirname + '/commands')
         .filter((file) => file.endsWith('.js') && file != 'init.js')
 
     for (const file of commands) {
-        const command = await import(`${__dirname}/${file}`)
+        const command = await import(`${__dirname}/commands/${file}`)
         let command_name = file.substring(0, file.length - 3)
         client.commands.set(command_name, command)
     }
