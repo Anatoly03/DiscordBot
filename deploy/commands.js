@@ -8,6 +8,21 @@ config()
 
 const commands = [
     new SlashCommandBuilder()
+        .setName('set')
+        .setDescription('La la')
+        .addStringOption((option) =>
+            option
+                .setName('category')
+                .setDescription('La la')
+                .setRequired(true)
+        )
+        .addStringOption((option) =>
+            option
+                .setName('value')
+                .setDescription('La la')
+                .setRequired(true)
+        ),
+    new SlashCommandBuilder()
         .setName('ping')
         .setDescription('Replies with pong!'),
     new SlashCommandBuilder()
