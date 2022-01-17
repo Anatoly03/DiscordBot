@@ -2,7 +2,7 @@ import { config } from 'dotenv'
 import { Client, Intents } from 'discord.js'
 import { REST } from '@discordjs/rest'
 import { Routes } from 'discord-api-types/v9'
-import { get_slash_commands } from '../src/commands/init.js'
+import { get_slash_commands } from '../src/commands/_init.js'
 
 config()
 
