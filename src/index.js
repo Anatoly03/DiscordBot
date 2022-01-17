@@ -3,7 +3,6 @@ import fs from 'fs'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { Client, Intents } from 'discord.js'
-import * as main from './main.js'
 import { redis } from './io.js'
 import init_commands from './commands.js'
 
@@ -19,6 +18,7 @@ const client = new Client({
         Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
         Intents.FLAGS.GUILD_PRESENCES,
         Intents.FLAGS.GUILD_MEMBERS,
+        Intents.FLAGS.DIRECT_MESSAGES
     ],
 })
 
