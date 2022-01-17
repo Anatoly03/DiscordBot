@@ -1,7 +1,15 @@
-export async function on_init() {
-    console.log('Connected!')
+import { Client, Interaction } from "discord.js"
+
+/**
+ * @param {Client} client
+ */
+export async function on_init(client) {
+    console.log(`Connected as ${client.user.tag}!`)
 }
 
+/**
+ * @param {Interaction} interaction
+ */
 export async function on_command(interaction) {
     const { commandName } = interaction
 

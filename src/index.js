@@ -3,6 +3,7 @@ import { Client, Intents } from 'discord.js'
 import * as main from './main.js'
 import { redis } from './io.js'
 
+// Before code execution
 (async () => redis.connect())()
 config()
 
@@ -25,6 +26,5 @@ client.on('interactionCreate', async (interaction) => {
     if (!interaction.isCommand()) return
     main.on_command(interaction)
 })
-
 
 client.login(process.env.DISCORD_TOKEN)
