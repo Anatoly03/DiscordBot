@@ -8,19 +8,22 @@ config()
 
 const commands = [
     new SlashCommandBuilder()
+        .setName('warn')
+        .setDescription('Warn a user')
+        .addUserOption((o) =>
+            o.setName('user').setDescription('User to warn').setRequired(true)
+        )
+        .addIntegerOption((o) =>
+            o.setName('points').setDescription('Points to take away')
+        ),
+    new SlashCommandBuilder()
         .setName('set')
         .setDescription('La la')
-        .addStringOption((option) =>
-            option
-                .setName('category')
-                .setDescription('La la')
-                .setRequired(true)
+        .addStringOption((o) =>
+            o.setName('category').setDescription('La la').setRequired(true)
         )
-        .addStringOption((option) =>
-            option
-                .setName('value')
-                .setDescription('La la')
-                .setRequired(true)
+        .addStringOption((o) =>
+            o.setName('value').setDescription('La la').setRequired(true)
         ),
     new SlashCommandBuilder()
         .setName('ping')
