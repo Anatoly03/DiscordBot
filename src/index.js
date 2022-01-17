@@ -2,10 +2,7 @@ import { config } from 'dotenv'
 import { Client, Intents } from 'discord.js'
 import * as main from './main.js'
 import { redis } from './io.js'
-
-// Before code execution
-(async () => redis.connect())()
-config()
+import init_commands from './commands/init.js'
 
 // Discord's Gateway Model:
 // https://discord.com/developers/docs/topics/gateway#list-of-intents
@@ -18,13 +15,16 @@ const client = new Client({
         Intents.FLAGS.GUILD_PRESENCES,
         Intents.FLAGS.GUILD_MEMBERS,
     ],
-})
+});
+
+// Before code execution
+(async () => {
+    config()
+    await redis.connect()
+    await init_commands(client)
+})()
 
 client.on('ready', main.on_init)
-
-client.on('interactionCreate', async (interaction) => {
-    if (!interaction.isCommand()) return
-    main.on_command(interaction)
-})
+client.on('interactionCreate', main.on_command)
 
 client.login(process.env.DISCORD_TOKEN)

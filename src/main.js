@@ -1,4 +1,4 @@
-import { Client, Interaction } from "discord.js"
+import { Client, Interaction } from 'discord.js'
 
 /**
  * @param {Client} client
@@ -11,17 +11,9 @@ export async function on_init(client) {
  * @param {Interaction} interaction
  */
 export async function on_command(interaction) {
-    const { commandName } = interaction
-
-    switch (commandName) {
-        case 'ping':
-            await interaction.reply('Pong!')
-            break
-        case 'server':
-            await interaction.reply('Server info.')
-            break
-        case 'user':
-            await interaction.reply('User info.')
-            break
-    }
+    if (!interaction.isCommand()) return
+    const command = interaction.client.commands.get(interaction.commandName)
+    console.log(command)
+    if (!command) return interaction.reply(':no_entry: Command not found.')
+    await command.run(interaction.client, interaction)
 }
