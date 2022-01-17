@@ -2,7 +2,7 @@ import { config } from 'dotenv'
 import { Client, Intents } from 'discord.js'
 import * as main from './main.js'
 import { redis } from './io.js'
-import init_commands from './commands/_init.js'
+import init_commands from './commands.js'
 
 // Discord's Gateway Model:
 // https://discord.com/developers/docs/topics/gateway#list-of-intents

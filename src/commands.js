@@ -27,10 +27,10 @@ export default async function (client) {
  */
 export async function get_slash_commands(client) {
     const definitions = fs
-        .readdirSync(__dirname)
-        .filter((file) => file.endsWith('.js') && file != 'init.js')
+        .readdirSync(__dirname + '/commands')
+        .filter((file) => file.endsWith('.js'))
         .map(async (file) => {
-            let command = await import(`${__dirname}/${file}`)
+            let command = await import(`${__dirname}/commands/${file}`)
             return command.definition
         })
     
