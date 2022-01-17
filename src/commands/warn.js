@@ -1,4 +1,15 @@
 import { Client, Interaction, MessageEmbed } from 'discord.js'
+import { SlashCommandBuilder } from '@discordjs/builders'
+
+export const definition = new SlashCommandBuilder()
+    .setName('warn')
+    .setDescription('Warn a user')
+    .addUserOption((o) =>
+        o.setName('user').setDescription('User to warn').setRequired(true)
+    )
+    .addIntegerOption((o) =>
+        o.setName('points').setDescription('Points to take away')
+    )
 
 /**
  * @param {Client} client
