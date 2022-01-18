@@ -36,8 +36,10 @@ const client = new Client({
         .filter((file) => file.endsWith('.js'))
 
     for (const file of eventFiles) {
-        const event = await import(__dirname + `/events/${file}`)
-        client.on(event.name, (...args) => event.run(...args))
+        const events = await import(__dirname + `/events/${file}`)
+        for (const event of events.default) {
+            client.on(event.name, (...args) => event.run(...args))
+        }
     }
 })()
 
