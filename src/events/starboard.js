@@ -1,7 +1,10 @@
 import { MessageReaction, User } from 'discord.js'
+//import io from '../io.js'
+//import { sb_ch } from '../config.json'
 
 /**
  * @param {MessageReaction} reaction
+ * @returns {boolean}
  */
 async function partial_fetch(reaction) {
     // https://discordjs.guide/popular-topics/reactions.html#listening-for-reactions-on-old-messages
