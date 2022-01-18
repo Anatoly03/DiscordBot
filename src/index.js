@@ -1,4 +1,9 @@
 import { config } from 'dotenv'
+config()
+
+/**
+ * @imports
+ */
 import fs from 'fs'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
@@ -18,19 +23,17 @@ const client = new Client({
         Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
         Intents.FLAGS.GUILD_PRESENCES,
         Intents.FLAGS.GUILD_MEMBERS,
-        Intents.FLAGS.DIRECT_MESSAGES
+        Intents.FLAGS.DIRECT_MESSAGES,
     ],
 })
 
-// Before code execution
-;(async () => {
-    config()
-    await redis.connect()
+async function main() {
     await init_commands(client)
-})()
+    await init_events()
+    await client.login(process.env.DISCORD_TOKEN)
+}
 
-// Events
-;(async () => {
+async function init_events() {
     const eventFiles = fs
         .readdirSync(__dirname + '/events')
         .filter((file) => file.endsWith('.js'))
@@ -38,9 +41,11 @@ const client = new Client({
     for (const file of eventFiles) {
         const events = await import(__dirname + `/events/${file}`)
         for (const event of events.default) {
-            client.on(event.name, (...args) => event.run(...args))
+            if (event.once)
+                client.once(event.name, (...args) => event.run(...args))
+            else client.on(event.name, (...args) => event.run(...args))
         }
     }
-})()
+}
 
-client.login(process.env.DISCORD_TOKEN)
+main()

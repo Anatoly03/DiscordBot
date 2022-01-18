@@ -1,21 +1,20 @@
-import { Message, MessageEmbed, MessageReaction, User } from 'discord.js'
-//import io from '../io.js'
-//import config from '../config.json'
-//const starboard_channel = JSON.parse(config).sb_ch
+import {
+    Client,
+    Message,
+    MessageEmbed,
+    MessageReaction,
+    User,
+} from 'discord.js'
+import io from '../io.js'
 
 /**
- * @param {MessageReaction} reaction
- * @returns {boolean} Whether the reaction is valid
+ * @param {Client} client
  */
-async function partial_fetch(reaction) {
-    // https://discordjs.guide/popular-topics/reactions.html#listening-for-reactions-on-old-messages
-    if (reaction.partial)
-        try {
-            await reaction.fetch()
-        } catch (error) {
-            return false
-        }
-    return true
+async function setup(client) {
+    // <TEMPORARY>
+    let channel = await io.get('starboard_channel') // 826111403739054090
+    let stars = await io.get('starboard_messages')
+    // </TEMPORARY>
 }
 
 /**
@@ -89,9 +88,29 @@ function message_reactions_string(message) {
 }
 
 /**
+ * @param {MessageReaction} reaction
+ * @returns {boolean} Whether the reaction is valid
+ */
+async function partial_fetch(reaction) {
+    // https://discordjs.guide/popular-topics/reactions.html#listening-for-reactions-on-old-messages
+    if (reaction.partial)
+        try {
+            await reaction.fetch()
+        } catch (error) {
+            return false
+        }
+    return true
+}
+
+/**
  * @export
  */
 export default [
+    {
+        name: 'ready',
+        once: true,
+        run: setup,
+    },
     {
         name: 'messageReactionAdd',
         run: reaction_add,

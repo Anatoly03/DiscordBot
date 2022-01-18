@@ -13,6 +13,7 @@ function run(client) {
 export default [
     {
         name: 'ready',
+        once: true,
         run,
     },
 ]
