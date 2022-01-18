@@ -50,7 +50,7 @@ async function reaction_remove(reaction, user) {
 function starboard_embed(message) {
     const embed = new MessageEmbed()
         .setColor(0xffd700)
-        .setTimestamp()
+        .setTimestamp(message.editedTimestamp || message.createdTimestamp)
         .setAuthor({
             name: message.author.username,
             iconURL: message.author.avatarURL(),
