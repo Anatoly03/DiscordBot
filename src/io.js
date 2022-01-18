@@ -10,7 +10,4 @@ redis.on('error', function (error) {
     throw error
 })
 
-export default {
-    set: redis.set,
-    get: redis.get,
-}
+export default redis
