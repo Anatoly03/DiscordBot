@@ -22,6 +22,8 @@ async function partial_fetch(reaction) {
  * @param {User} user
  */
 async function reaction_add(reaction, user) {
+    if (!await partial_fetch(reaction)) return
+
     console.log(reaction.message.content)
 }
 
@@ -30,6 +32,8 @@ async function reaction_add(reaction, user) {
  * @param {User} user
  */
 async function reaction_remove(reaction, user) {
+    if (!await partial_fetch(reaction)) return
+
     console.log(reaction.message.content)
 }
 
@@ -39,14 +43,10 @@ async function reaction_remove(reaction, user) {
 export default [
     {
         name: 'messageReactionAdd',
-        run: async (r, u) => {
-            if (await partial_fetch(r)) reaction_add(r, u)
-        },
+        run: reaction_add,
     },
     {
         name: 'messageReactionRemove',
-        run: async (r, u) => {
-            if (await partial_fetch(r)) reaction_remove(r, u)
-        },
+        run: async (r, u) => reaction_remove,
     },
 ]
