@@ -22,7 +22,7 @@ async function partial_fetch(reaction) {
  * @param {User} user
  */
 async function reaction_add(reaction, user) {
-    if (!await partial_fetch(reaction)) return
+    if (!(await partial_fetch(reaction))) return
 
     console.log(reaction.message.content)
 }
@@ -32,7 +32,7 @@ async function reaction_add(reaction, user) {
  * @param {User} user
  */
 async function reaction_remove(reaction, user) {
-    if (!await partial_fetch(reaction)) return
+    if (!(await partial_fetch(reaction))) return
 
     console.log(reaction.message.content)
 }
