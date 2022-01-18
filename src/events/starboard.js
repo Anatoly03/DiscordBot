@@ -4,7 +4,7 @@ import { MessageReaction, User } from 'discord.js'
 
 /**
  * @param {MessageReaction} reaction
- * @returns {boolean}
+ * @returns {boolean} Whether the reaction is valid
  */
 async function partial_fetch(reaction) {
     // https://discordjs.guide/popular-topics/reactions.html#listening-for-reactions-on-old-messages
