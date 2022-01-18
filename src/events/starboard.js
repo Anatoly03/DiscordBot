@@ -25,9 +25,10 @@ async function partial_fetch(reaction) {
 async function reaction_add(reaction, user) {
     if (!(await partial_fetch(reaction))) return
 
-    const embed = starboard_embed(reaction.message)
-
-    reaction.message.reply({ embeds : [embed] })
+    reaction.message.reply({
+        content: message_reactions_string(reaction.message),
+        embeds: [starboard_embed(reaction.message)],
+    })
 
     //console.log(reaction.message.content)
 }
@@ -68,6 +69,23 @@ function starboard_embed(message) {
     )
 
     return embed
+}
+
+/**
+ * @param {Message} message
+ * @returns {string}
+ * @description Generate a reaction string for the starboard message.
+ */
+function message_reactions_string(message) {
+    let content = ''
+    message.reactions.cache
+        .sort((a, b) => b.count - a.count)
+        .forEach((reaction) => {
+            if (!reaction.emoji) return
+            if (content.length > 0) content += '   '
+            content += `${reaction.emoji}   **${reaction.count}**`
+        })
+    return content
 }
 
 /**
