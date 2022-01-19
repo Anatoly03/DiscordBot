@@ -1,14 +1,8 @@
 import { config } from 'dotenv'
-config()
-
-/**
- * @imports
- */
 import fs from 'fs'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { Client, Intents } from 'discord.js'
-import { redis } from './io.js'
 import init_commands from './commands.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -28,6 +22,7 @@ const client = new Client({
 })
 
 async function main() {
+    config()
     await init_commands(client)
     await init_events()
     await client.login(process.env.DISCORD_TOKEN)
