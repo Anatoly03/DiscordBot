@@ -17,8 +17,7 @@ export default async function (client) {
 
     for (const file of commands) {
         const command = await import(`${__dirname}/commands/${file}`)
-        let command_name = file.substring(0, file.length - 3)
-        client.commands.set(command_name, command)
+        client.commands.set(command.definition.name, command)
     }
 }
 
