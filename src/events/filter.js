@@ -55,10 +55,9 @@ export async function is_profane(str) {
 }
 
 /**
- * @param {string} str
- * @returns {boolean} is profane
+ * @io
  */
-export async function load(str) {
+export async function load() {
     let input = await io.get('filter')
     if (input) patterns = JSON.parse(input)
 }

@@ -1,35 +1,51 @@
-import {
-    Client,
-    Message,
-    MessageEmbed,
-    MessageReaction,
-    User,
-} from 'discord.js'
+import { Message, MessageEmbed, MessageReaction, User } from 'discord.js'
 import io from '../io.js'
 
-/**
- * @param {Client} client
- */
-async function setup(client) {
-    // <TEMPORARY>
-    let channel = await io.get('starboard_channel') // 826111403739054090
-    let stars = await io.get('starboard_messages')
-    // </TEMPORARY>
-}
+// REMOVE INITIALIZATION: Initialised, if starboard is activated.
+let star_requirement_push = 1
+let star_requirement_pull = 0
+let starboard = {}
+await load()
 
 /**
  * @param {MessageReaction} reaction
  * @param {User} user
  */
 async function reaction_add(reaction, user) {
+    if (!starboard) return false
     if (!(await partial_fetch(reaction))) return
 
-    reaction.message.reply({
-        content: message_reactions_string(reaction.message),
-        embeds: [starboard_embed(reaction.message)],
-    })
+    const reaction_count = message_reactions(reaction.message).first().count
+    if (star_requirement_push > reaction_count) return
 
-    //console.log(reaction.message.content)
+    const starboard_channel = await reaction.message.guild.channels.fetch(
+        '826111403739054090'
+    )
+
+    if (!starboard_channel) return
+
+    if (starboard[reaction.message.id]) {
+        // EDIT MESSAGE ON STARBOARD
+
+        const message = await starboard_channel.messages.fetch(
+            starboard[reaction.message.id]
+        )
+        if (!message) return
+
+        message.edit({
+            content: message_reactions_string(reaction.message),
+            embeds: [starboard_embed(reaction.message)],
+        })
+    } else {
+        // PUSH MESSAGE TO STARBOARD
+
+        const message = await starboard_channel.send({
+            content: message_reactions_string(reaction.message),
+            embeds: [starboard_embed(reaction.message)],
+        })
+
+        starboard[reaction.message.id] = message.id
+    }
 }
 
 /**
@@ -37,9 +53,26 @@ async function reaction_add(reaction, user) {
  * @param {User} user
  */
 async function reaction_remove(reaction, user) {
+    if (!starboard) return false
     if (!(await partial_fetch(reaction))) return
 
-    console.log(reaction.message.content)
+    const reaction_count = message_reactions(reaction.message).first()?.count || 0
+    if (star_requirement_pull < reaction_count) return
+    if (!starboard[reaction.message.id]) return
+
+    // PULL MESSAGE FROM STARBOARD
+
+    const starboard_channel = await reaction.message.guild.channels.fetch(
+        '826111403739054090'
+    )
+
+    const message = await starboard_channel?.messages.fetch(
+        starboard[reaction.message.id]
+    )
+
+    message?.delete()
+
+    delete starboard[reaction.message.id]
 }
 
 /**
@@ -72,18 +105,24 @@ function starboard_embed(message) {
 
 /**
  * @param {Message} message
+ * @returns {Collection<string, MessageReaction>}
+ */
+function message_reactions(message) {
+    return message.reactions.cache.sort((a, b) => b.count - a.count)
+}
+
+/**
+ * @param {Message} message
  * @returns {string}
  * @description Generate a reaction string for the starboard message.
  */
 function message_reactions_string(message) {
     let content = ''
-    message.reactions.cache
-        .sort((a, b) => b.count - a.count)
-        .forEach((reaction) => {
-            if (!reaction.emoji) return
-            if (content.length > 0) content += '   '
-            content += `${reaction.emoji}   **${reaction.count}**`
-        })
+    message_reactions(message).forEach((reaction) => {
+        if (!reaction.emoji) return
+        if (content.length > 0) content += '   '
+        content += `${reaction.emoji}   **${reaction.count}**`
+    })
     return content
 }
 
@@ -103,20 +142,23 @@ async function partial_fetch(reaction) {
 }
 
 /**
+ * @io
+ */
+async function load() {
+    let input = await io.get('starboard/messages')
+    if (input) starboard = JSON.parse(input)
+}
+
+/**
  * @export
  */
 export default [
-    {
-        name: 'ready',
-        once: true,
-        run: setup,
-    },
     {
         name: 'messageReactionAdd',
         run: reaction_add,
     },
     {
         name: 'messageReactionRemove',
-        run: async (r, u) => reaction_remove,
+        run: reaction_remove,
     },
 ]

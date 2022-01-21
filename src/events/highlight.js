@@ -67,10 +67,9 @@ export async function check_message(message) {
 }
 
 /**
- * @param {string} str
- * @returns {boolean} is profane
+ * @io
  */
-export async function load(str) {
+export async function load() {
     let input = await io.get('highlight')
     if (input) patterns = JSON.parse(input)
 }
