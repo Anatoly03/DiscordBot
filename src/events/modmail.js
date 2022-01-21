@@ -1,5 +1,9 @@
 import { Message, MessageEmbed } from 'discord.js'
 
+/**
+ * @type {{ [keys: string] : string}}
+ * @description Links user ids to thread ids. 
+ */
 let links = {}
 
 /**
@@ -55,10 +59,6 @@ async function message_outgoing(message) {
 
     let response = new MessageEmbed()
         .setColor(0x5bc0de)
-        /*.setAuthor({
-            name: message.author.tag,
-            iconURL: message.author.avatarURL(),
-        })*/
         .setDescription(message.content.substring(0, 1024))
 
     user.send({
