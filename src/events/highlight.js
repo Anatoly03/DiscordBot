@@ -62,7 +62,7 @@ export async function check_message(message) {
 
     Object.keys(patterns).forEach(async (id) => {
         for (let highlight of patterns[id]) {
-            if (message.content.match(new RegExp(highlight, 'g'))) {
+            if (message.content.match(new RegExp(highlight, 'gi'))) {
                 let user = await client.users.fetch(id)
                 let link_to = `https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`
 
