@@ -57,8 +57,6 @@ async function message_command(message) {
     let input = message.content
         .substring(1)
         .match(/".*"|`.+`|[a-zA-Z0-9\-\.]+/g)
-
-    console.log(input)
 }
 
 /**

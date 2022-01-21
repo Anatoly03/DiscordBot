@@ -7,6 +7,7 @@ import { Message } from 'discord.js'
  */
 async function message_incoming(message) {
     if (message.channel.type !== 'DM') return
+    if (message.author.bot) return
 
     console.log('DM', message.content)
 }
