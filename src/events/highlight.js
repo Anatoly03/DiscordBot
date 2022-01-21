@@ -43,6 +43,8 @@ export function list(user, str) {
  */
 export async function check_message(message) {
     if (message.channel.type === 'DM') return
+    if (message.type != 'DEFAULT' && message.type != 'REPLY') return
+
     let client = message.client
 
     Object.keys(patterns).forEach(async (id) => {
