@@ -1,4 +1,4 @@
-import { User } from 'discord.js'
+import { Message, User } from 'discord.js'
 import io from '../io.js'
 
 let patterns = {}
@@ -22,7 +22,7 @@ export async function add(user, regexp) {
 export async function del(user, regexp) {
     if (!patterns[user.id]) return false
     if (patterns[user.id]?.includes(regexp)) {
-        patterns[user.id] = patterns[user.id].filter(r => r != regexp)
+        patterns[user.id] = patterns[user.id].filter((r) => r != regexp)
         await io.set(`highlight`, JSON.stringify(patterns))
         return true
     }
@@ -30,11 +30,34 @@ export async function del(user, regexp) {
 }
 
 /**
+ * @param {User} user
  * @param {string} str
  * @returns {string[][]} Patterns [id, pattern, match] that were triggered.
  */
-export async function check(str) {
+export async function check(user, str) {
     return []
+}
+
+/**
+ * @param {Message} message
+ * @returns {boolean} is profane
+ */
+export async function check_message(message) {
+    if (message.channel.type === 'dm') return
+
+    let client = message.client
+
+    users:
+    for (let [id, highlights] of Object.entries(patterns)) {
+        for (let highlight of highlights) {
+            if (message.content.includes(highlight)) {
+                client.users.fetch(id).then((user) => {
+                    user.send(`${message.author.tag} said: ${message.content}`)
+                })
+                continue users
+            }
+        }
+    }
 }
 
 /**
@@ -53,6 +76,6 @@ export async function load(str) {
 export default [
     {
         name: 'messageCreate',
-        run: () => {},
+        run: check_message,
     },
 ]
