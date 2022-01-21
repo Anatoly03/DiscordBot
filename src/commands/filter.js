@@ -1,6 +1,5 @@
 import { Client, Interaction } from 'discord.js'
 import { SlashCommandBuilder } from '@discordjs/builders'
-import * as filter from '../comps/filter.js'
 
 export const definition = new SlashCommandBuilder()
     .setName('filter')
@@ -29,6 +28,11 @@ export const definition = new SlashCommandBuilder()
     )
     .addSubcommand((subcommand) =>
         subcommand
+            .setName('list')
+            .setDescription('List all profanity patterns.')
+    )
+    .addSubcommand((subcommand) =>
+        subcommand
             .setName('check')
             .setDescription('Proof a string against the filter.')
             .addStringOption((option) =>
@@ -53,6 +57,10 @@ export async function run(client, interaction) {
             del_filter(interaction)
             break
 
+        case 'list':
+            list_filter(interaction)
+            break
+
         case 'check':
             check_filter(interaction)
             break
@@ -74,6 +82,13 @@ async function add_filter(interaction) {
  */
 async function del_filter(interaction) {
     interaction.reply('Deleted.')
+}
+
+/**
+ * @param {Interaction} interaction
+ */
+ async function list_filter(interaction) {
+    interaction.reply('Listed.')
 }
 
 /**

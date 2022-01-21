@@ -73,7 +73,6 @@ export async function check_message(message) {
 export async function load(str) {
     let input = await io.get('highlight')
     if (input) patterns = JSON.parse(input)
-    return true
 }
 
 /**
