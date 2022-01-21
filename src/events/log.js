@@ -5,9 +5,6 @@ import io from '../io.js'
  * @param {GuildMember} member
  */
 async function member_join(member) {
-    if (new_message.channel.type === 'DM') return
-    if (new_message.author.bot) return
-
     console.log('member join')
 }
 
@@ -15,9 +12,6 @@ async function member_join(member) {
  * @param {GuildMember} member
  */
 async function member_leave(member) {
-    if (new_message.channel.type === 'DM') return
-    if (new_message.author.bot) return
-
     console.log('member leave')
 }
 
@@ -27,7 +21,7 @@ async function member_leave(member) {
  */
 async function message_edit(old_message, new_message) {
     if (new_message.channel.type === 'DM') return
-    if (new_message.author.bot) return
+    if (new_message.author?.bot) return
 
     console.log('message edit')
 }
@@ -36,8 +30,8 @@ async function message_edit(old_message, new_message) {
  * @param {Message} message
  */
 async function message_delete(message) {
-    if (new_message.channel.type === 'DM') return
-    if (new_message.author.bot) return
+    if (message.channel.type === 'DM') return
+    if (message.author?.bot) return
 
     console.log('message delete')
 }
@@ -46,9 +40,6 @@ async function message_delete(message) {
  * @param {{content? : string, embeds?: MessageEmbed[]}} content Message Content
  */
 async function push(content) {
-    if (message.channel.type !== 'text') return
-    if (message.author.bot) return
-
     const log_channel = await reaction.message.guild.channels.fetch(
         '826362812284141579'
     )
