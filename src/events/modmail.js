@@ -1,4 +1,6 @@
-import { Message } from 'discord.js'
+import { Message, MessageEmbed } from 'discord.js'
+
+let link = {}
 
 /**
  * @param {Message} message
@@ -9,7 +11,29 @@ async function message_incoming(message) {
     if (message.channel.type !== 'DM') return
     if (message.author.bot) return
 
-    console.log('DM', message.content)
+    const mod_channel = await message.client.guilds.cache
+        .get('826066564368302080')
+        .channels.fetch('826099046803308594')
+
+    if (!mod_channel) return
+
+    const thread = await mod_channel.threads.create({
+        name: message.author.tag,
+        autoArchiveDuration: 60,
+        reason: 'Modmail',
+    })
+
+    let response = new MessageEmbed()
+        .setColor(0x5bc0de)
+        .setAuthor({
+            name: message.author.tag,
+            iconURL: message.author.avatarURL(),
+        })
+        .setDescription(message.content.substring(0, 1024))
+
+    thread.send({
+        embeds: [response],
+    })
 }
 
 /**
