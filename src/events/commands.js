@@ -53,8 +53,19 @@ async function interaction_command(interaction) {
  */
 async function message_command(message) {
     if (message.channel.type === 'DM') return
-    if (!message.content.match(/[\.\-!].+/)) return
-    let input = message.content
+    const input = command_arguments(message)
+    if (input == null) return
+
+    console.log(input)
+}
+
+/**
+ * @param {Message} message
+ */
+export function command_arguments(message) {
+    if (message.content.match(/^[\.\-!].+$/) == null) return
+
+    return message.content
         .substring(1)
         .match(/".*"|`.+`|[a-zA-Z0-9\-\.]+/g)
 }

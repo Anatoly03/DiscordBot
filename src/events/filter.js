@@ -1,5 +1,6 @@
 import { Message } from 'discord.js'
 import io from '../io.js'
+import { command_arguments } from './commands.js'
 
 let patterns = {}
 await load()
@@ -68,6 +69,7 @@ export async function load() {
 async function run(message) {
     if (message.channel.type !== 'text') return
     if (message.author.bot) return
+    if (command_arguments(message)) return // Ignore commands: TEMPORARY: Users can also use commands
 
     // If message profane, delete.
 }
