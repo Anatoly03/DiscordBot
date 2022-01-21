@@ -1,4 +1,4 @@
-import { Message, User } from 'discord.js'
+import { Message, MessageEmbed, User } from 'discord.js'
 import io from '../io.js'
 
 let patterns = {}
@@ -31,6 +31,20 @@ export async function del(user, regexp) {
 
 /**
  * @param {User} user
+ * @returns {boolean} success
+ */
+export async function list(user) {
+    if (!patterns[user.id]) return false
+    if (patterns[user.id]?.includes(regexp)) {
+        patterns[user.id] = patterns[user.id].filter((r) => r != regexp)
+        await io.set(`highlight`, JSON.stringify(patterns))
+        return true
+    }
+    return false
+}
+
+/**
+ * @param {User} user
  * @param {string} str
  * @returns {string[][]} Patterns [id, pattern, match] that were triggered.
  */
@@ -43,21 +57,26 @@ export async function check(user, str) {
  * @returns {boolean} is profane
  */
 export async function check_message(message) {
-    if (message.channel.type === 'dm') return
-
+    if (message.channel.type === 'DM') return
     let client = message.client
 
-    users:
-    for (let [id, highlights] of Object.entries(patterns)) {
-        for (let highlight of highlights) {
-            if (message.content.includes(highlight)) {
-                client.users.fetch(id).then((user) => {
-                    user.send(`${message.author.tag} said: ${message.content}`)
-                })
-                continue users
+    Object.keys(patterns).forEach(async (id) => {
+        for (let highlight of patterns[id]) {
+            if (message.content.match(new RegExp(highlight, 'g'))) {
+                let user = await client.users.fetch(id)
+                let link_to = `https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`
+
+                let embed = new MessageEmbed()
+                    .setColor(0x0275d8)
+                    .setTitle('Highlight')
+                    .setDescription(`[Message](${link_to}) triggered \`${highlight}\``)
+
+                user.send({ embeds: [embed] })
+
+                return
             }
         }
-    }
+    })
 }
 
 /**
