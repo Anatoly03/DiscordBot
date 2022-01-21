@@ -31,25 +31,10 @@ export async function del(user, regexp) {
 
 /**
  * @param {User} user
- * @returns {boolean} success
+ * @returns {string[]} Patterns [id, pattern, match] that were triggered.
  */
-export async function list(user) {
-    if (!patterns[user.id]) return false
-    if (patterns[user.id]?.includes(regexp)) {
-        patterns[user.id] = patterns[user.id].filter((r) => r != regexp)
-        await io.set(`highlight`, JSON.stringify(patterns))
-        return true
-    }
-    return false
-}
-
-/**
- * @param {User} user
- * @param {string} str
- * @returns {string[][]} Patterns [id, pattern, match] that were triggered.
- */
-export async function check(user, str) {
-    return []
+export function list(user, str) {
+    return patterns[user.id].map((a) => a)
 }
 
 /**
@@ -69,7 +54,9 @@ export async function check_message(message) {
                 let embed = new MessageEmbed()
                     .setColor(0x0275d8)
                     .setTitle('Highlight')
-                    .setDescription(`[Message](${link_to}) triggered \`${highlight}\``)
+                    .setDescription(
+                        `[Message](${link_to}) triggered \`${highlight}\``
+                    )
 
                 user.send({ embeds: [embed] })
 
