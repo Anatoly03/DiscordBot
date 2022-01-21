@@ -45,6 +45,7 @@ async function reaction_add(reaction, user) {
         })
 
         starboard[reaction.message.id] = message.id
+        await io.set(`starboard/messages`, JSON.stringify(starboard))
     }
 }
 
@@ -73,6 +74,7 @@ async function reaction_remove(reaction, user) {
     message?.delete()
 
     delete starboard[reaction.message.id]
+    await io.set(`starboard/messages`, JSON.stringify(starboard))
 }
 
 /**
