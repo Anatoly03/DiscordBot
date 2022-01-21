@@ -2,7 +2,7 @@ import { Message, MessageEmbed } from 'discord.js'
 
 /**
  * @type {{ [keys: string] : string}}
- * @description Links user ids to thread ids. 
+ * @description Links user ids to thread ids.
  */
 let links = {}
 
@@ -21,11 +21,14 @@ async function message_incoming(message) {
 
     if (!mod_channel) return
 
-    const thread = await mod_channel.threads.create({
-        name: message.author.tag,
-        autoArchiveDuration: 60,
-        reason: 'Modmail',
-    })
+    let thread
+    if (!links[message.author.id])
+        thread = await mod_channel.threads.create({
+            name: message.author.tag,
+            autoArchiveDuration: 60,
+            reason: 'Modmail',
+        })
+    else thread = await mod_channel.threads.fetch(links[message.author.id])
 
     let response = new MessageEmbed()
         .setColor(0x5bc0de)
