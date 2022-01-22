@@ -1,7 +1,7 @@
 import { Client, Interaction, MessageEmbed } from 'discord.js'
 import { SlashCommandBuilder } from '@discordjs/builders'
 
-export const definition = new SlashCommandBuilder()
+const definition = new SlashCommandBuilder()
     .setName('warn')
     .setDescription('Warn a user')
     .addSubcommand((subcommand) =>
@@ -40,7 +40,7 @@ export const definition = new SlashCommandBuilder()
  * @param {Client} client
  * @param {Interaction} interaction
  */
-export function run(client, interaction) {
+function run(client, interaction) {
     let user = interaction.options.getUser('user')
     let points = 0
     let description
@@ -69,9 +69,7 @@ export function run(client, interaction) {
 
     let dm_embed = new MessageEmbed()
         .setColor(0xf0ad4e)
-        .setDescription(
-            ':warning: **You have been warned!**\n\n' + description
-        )
+        .setDescription(':warning: **You have been warned!**\n\n' + description)
         .setFooter({
             text: `This warning weights ${points} points.`,
         })
@@ -104,3 +102,13 @@ function get_template(s) {
             }
     }
 }
+
+/**
+ * @export
+ */
+export default [
+    {
+        definition,
+        run,
+    },
+]

@@ -2,7 +2,7 @@ import { Client, Interaction, MessageEmbed } from 'discord.js'
 import { SlashCommandBuilder } from '@discordjs/builders'
 import * as highlight from '../events/highlight.js'
 
-export const definition = new SlashCommandBuilder()
+const definition = new SlashCommandBuilder()
     .setName('hl')
     .setDescription('Add or remove highlight.')
     .addSubcommand((command) =>
@@ -35,7 +35,7 @@ export const definition = new SlashCommandBuilder()
  * @param {Client} client
  * @param {Interaction} interaction
  */
-export async function run(client, interaction) {
+async function run(client, interaction) {
     let embed = new MessageEmbed().setColor(0x0275d8)
 
     switch (interaction.options.getSubcommand()) {
@@ -76,18 +76,26 @@ export async function run(client, interaction) {
 
                 response.unshift('')
 
-                embed
-                    .setTitle('Highlights')
-                    .setDescription(
-                        response.reduce((a, b) => {
-                            if (a.length > 0) a += ', '
-                            a += `\`${b}\``
-                            return a
-                        })
-                    )
+                embed.setTitle('Highlights').setDescription(
+                    response.reduce((a, b) => {
+                        if (a.length > 0) a += ', '
+                        a += `\`${b}\``
+                        return a
+                    })
+                )
 
                 interaction.reply({ embeds: [embed] })
             }
             break
     }
 }
+
+/**
+ * @export
+ */
+export default [
+    {
+        definition,
+        run,
+    },
+]

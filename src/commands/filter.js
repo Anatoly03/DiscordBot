@@ -1,7 +1,7 @@
 import { Client, Interaction } from 'discord.js'
 import { SlashCommandBuilder } from '@discordjs/builders'
 
-export const definition = new SlashCommandBuilder()
+const definition = new SlashCommandBuilder()
     .setName('filter')
     .setDescription('Add or remove words from the filter.')
     .addSubcommand((subcommand) =>
@@ -47,7 +47,7 @@ export const definition = new SlashCommandBuilder()
  * @param {Client} client
  * @param {Interaction} interaction
  */
-export async function run(client, interaction) {
+async function run(client, interaction) {
     switch (interaction.options.getSubcommand()) {
         case 'add':
             add_filter(interaction)
@@ -97,3 +97,13 @@ async function list_filter(interaction) {
 async function check_filter(interaction) {
     interaction.reply('Checked.')
 }
+
+/**
+ * @export
+ */
+export default [
+    {
+        definition,
+        run,
+    },
+]
