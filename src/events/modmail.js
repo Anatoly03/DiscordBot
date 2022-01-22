@@ -15,9 +15,14 @@ async function message_incoming(message) {
     if (message.channel.type !== 'DM') return
     if (message.author.bot) return
 
-    const mod_channel = await message.client.guilds.cache
-        .get('826066564368302080')
-        .channels.fetch('826099046803308594')
+    let mutual_guilds = message.client.guilds.cache.filter((guild) =>
+        guild.members.cache.get(message.author.id)
+    )
+
+    if (mutual_guilds.size > 1) return
+    let guild = mutual_guilds.first()
+
+    const mod_channel = await guild.channels.fetch('826099046803308594')
 
     if (!mod_channel) return
 

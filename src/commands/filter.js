@@ -87,7 +87,7 @@ async function del_filter(interaction) {
 /**
  * @param {Interaction} interaction
  */
- async function list_filter(interaction) {
+async function list_filter(interaction) {
     interaction.reply('Listed.')
 }
 
